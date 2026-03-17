@@ -421,10 +421,6 @@ class Enemy3(pygame.sprite.Sprite):
             self.kill()
 
 
-
-
-
-
 def get_background(name):
     image = pygame.image.load(join(ASSETS_DIR, "Background", name))
     _, _, width, height = image.get_rect()
@@ -436,9 +432,6 @@ def get_background(name):
             tiles.append(pos)
 
     return tiles, image
-
-
-
 
 
 def handle_vertical_collision(player, objects, dy):
