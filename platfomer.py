@@ -9,9 +9,16 @@ from os.path import isfile, join
 
 pygame.init()
 
+# Use project-relative paths so the script works from any current working directory.
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ASSETS_DIR = join(BASE_DIR, "assets")
+
 pygame.display.set_caption("UEH Journey")
-icon = pygame.image.load('C:\\Users\\ADMIN\\OneDrive\\Pictures\\Saved Pictures\\Logo_UEH_xanh.png')
+# Generate a basic icon so the game doesn't require an external file.
+icon = pygame.Surface((32, 32), pygame.SRCALPHA)
+pygame.draw.circle(icon, (255, 255, 0), (16, 16), 16)
 pygame.display.set_icon(icon)
+
 WIDTH, HEIGHT = 1500, 800
 FPS = 60
 PLAYER_VEL = 5
@@ -25,7 +32,7 @@ def flip(sprites):
 
 
 def load_sprite_sheets(dir1, dir2, width, height, direction=False):
-    path = join("assets", dir1, dir2)
+    path = join(ASSETS_DIR, dir1, dir2)
     images = [f for f in os.listdir(path) if isfile(join(path, f))]
 
     all_sprites = {}
@@ -50,7 +57,7 @@ def load_sprite_sheets(dir1, dir2, width, height, direction=False):
 
 
 def get_block(size):
-    path = join("assets", "Terrain", "Terrain.png")
+    path = join(ASSETS_DIR, "Terrain", "Terrain.png")
     image = pygame.image.load(path)
     surface = pygame.Surface((size, size), 32)
     rect = pygame.Rect(10, 0, size, size)
@@ -121,11 +128,9 @@ class Player(pygame.sprite.Sprite):
     def loop(self, fps, enemy_sprites):
         self.y_vel += min(1, (self.fall_count / fps) * self.GRAVITY)
         self.move(self.x_vel, self.y_vel)
-        if pygame.sprite.spritecollide(self, enemy_sprites, False):
-            self.giam_lifepoints()
         collisions = pygame.sprite.spritecollide(self, enemy_sprites, False)
         if collisions:
-            self.giam_lifepoints
+            self.giam_lifepoints()
 
         if self.hit:
             self.hit_count += 1
@@ -421,7 +426,7 @@ class Enemy3(pygame.sprite.Sprite):
 
 
 def get_background(name):
-    image = pygame.image.load(join("assets", "Background", name))
+    image = pygame.image.load(join(ASSETS_DIR, "Background", name))
     _, _, width, height = image.get_rect()
     tiles = []
 
